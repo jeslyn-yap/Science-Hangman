@@ -120,14 +120,12 @@
   <div class="container">
     <h1>Tuberculosis Hangman</h1>
 
-    <!-- Question Section -->
     <div id="questionDiv">
       <p id="question">What is the main organ affected by Tuberculosis?</p>
       <input type="text" id="answer" placeholder="Your answer here" />
       <button id="answerBtn" onclick="checkAnswer()">Submit Answer</button>
     </div>
 
-    <!-- Hangman Game Section -->
     <div id="hangmanGame" style="display: none;">
       <div id="wordDisplay"></div>
       <div id="letters"></div>
@@ -142,7 +140,6 @@
     </div>
   </div>
 
-  <!-- Mini Quiz Modal -->
   <div id="quizModal">
     <div id="quizModalContent">
       <p id="quizQuestion"></p>
@@ -153,170 +150,181 @@
     </div>
   </div>
 
-  <script>
-    const questions = [
-      { question: "What is the main organ affected by Tuberculosis?", answer: "lungs" },
-      { question: "Which bacteria causes Tuberculosis?", answer: "mycobacterium" },
-      { question: "What is one symptom of Tuberculosis?", answer: "cough" },
-    ];
+<script>
+  const questions = [
+    { question: "What is the main organ affected by Tuberculosis?", answer: "lungs" },
+    { question: "Which bacteria causes Tuberculosis?", answer: "mycobacterium" },
+    { question: "What is one symptom of Tuberculosis?", answer: "cough" },
+    { question: "What is the abbreviation for Tuberculosis?", answer: "tb" },
+    { question: "How is TB primarily spread?", answer: "air" },
+    { question: "What type of disease is TB?", answer: "infectious" },
+    { question: "What body system does TB mainly affect?", answer: "respiratory" },
+    { question: "Can TB be cured with antibiotics?", answer: "yes" }
+  ];
 
-    const words = [
-      "lungs", "cough", "fever", "bacteria", "infection", "immune",
-      "vaccine", "sick", "tuberculosis", "antibiotics", "mycobacterium"
-    ];
+  const words = [
+    "lungs", "cough", "fever", "bacteria", "infection", "immune",
+    "vaccine", "sick", "tuberculosis", "antibiotics", "mycobacterium"
+  ];
 
-    const miniQuiz = [
-      { q: "Is TB contagious? (yes or no)", a: "yes" },
-      { q: "Can TB affect more than just lungs? (yes or no)", a: "yes" },
-      { q: "What does TB stand for?", a: "tuberculosis" },
-      { q: "Does TB spread through air? (yes or no)", a: "yes" }
-    ];
+  const miniQuiz = [
+    { q: "What part of the body does tuberculosis mostly affect?", a: "lungs" },
+    { q: "How is tuberculosis spread?", a: "through the air" },
+    { q: "Which group of people is more likely to get TB?", a: "people with weak immune systems" },
+    { q: "What is one common symptom of active TB?", a: "cough" },
+    { q: "Is tuberculosis contagious? (yes or no)", a: "yes" },
+    { q: "Can tuberculosis cause chest pain? (yes or no)", a: "yes" },
+    { q: "Can TB be treated with medication? (yes or no)", a: "yes" },
+    { q: "Is there a type of TB that has no symptoms?", a: "yes" },
+    { q: "Should you cover your mouth when coughing to prevent TB? (yes or no)", a: "yes" },
+    { q: "What can a chest X-ray detect?", a: "tb in the lungs" }
+  ];
 
-    let currentQuestionIndex = 0;
-    let chosenWord;
-    let guessed = [];
-    let wrongGuesses = 0;
-    const maxWrong = 6;
+  let currentQuestionIndex = 0;
+  let chosenWord;
+  let guessed = [];
+  let wrongGuesses = 0;
+  const maxWrong = 6;
 
-    const wordDisplay = document.getElementById("wordDisplay");
-    const lettersDiv = document.getElementById("letters");
-    const message = document.getElementById("message");
-    const wrongCount = document.getElementById("wrongCount");
-    const hangmanDrawing = document.getElementById("hangmanDrawing");
-    const nextBtnHangman = document.getElementById("nextBtnHangman");
-    const questionDiv = document.getElementById("questionDiv");
-    const hangmanGameDiv = document.getElementById("hangmanGame");
+  const wordDisplay = document.getElementById("wordDisplay");
+  const lettersDiv = document.getElementById("letters");
+  const message = document.getElementById("message");
+  const wrongCount = document.getElementById("wrongCount");
+  const hangmanDrawing = document.getElementById("hangmanDrawing");
+  const nextBtnHangman = document.getElementById("nextBtnHangman");
+  const questionDiv = document.getElementById("questionDiv");
+  const hangmanGameDiv = document.getElementById("hangmanGame");
 
-    const quizModal = document.getElementById("quizModal");
-    const quizQuestion = document.getElementById("quizQuestion");
-    const quizAnswer = document.getElementById("quizAnswer");
-    const quizFeedback = document.getElementById("quizFeedback");
+  const quizModal = document.getElementById("quizModal");
+  const quizQuestion = document.getElementById("quizQuestion");
+  const quizAnswer = document.getElementById("quizAnswer");
+  const quizFeedback = document.getElementById("quizFeedback");
 
-    const faces = ["🙂", "😐", "😬", "😟", "😨", "😱", "💀"];
+  const faces = ["🙂", "😐", "😬", "😟", "😨", "😱", "💀"];
 
-    function checkAnswer() {
-      const answer = document.getElementById("answer").value.toLowerCase();
-      if (answer === questions[currentQuestionIndex].answer) {
-        startHangmanGame();
-      } else {
-        alert("Wrong answer! Please try again.");
-      }
+  function checkAnswer() {
+    const answer = document.getElementById("answer").value.toLowerCase();
+    if (answer === questions[currentQuestionIndex].answer) {
+      startHangmanGame();
+    } else {
+      alert("Wrong answer! Please try again.");
     }
+  }
 
-    function startHangmanGame() {
-      questionDiv.style.display = "none";
-      hangmanGameDiv.style.display = "block";
-      chosenWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
-      guessed = [];
-      wrongGuesses = 0;
+  function startHangmanGame() {
+    questionDiv.style.display = "none";
+    hangmanGameDiv.style.display = "block";
+    chosenWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+    guessed = [];
+    wrongGuesses = 0;
+    wrongCount.textContent = wrongGuesses;
+    hangmanDrawing.textContent = faces[wrongGuesses];
+    message.textContent = "";
+    nextBtnHangman.style.display = "none";
+    document.getElementById("fullWordGuess").value = "";
+    displayWord();
+    setupLetters();
+  }
+
+  function displayWord() {
+    wordDisplay.innerHTML = chosenWord
+      .split("")
+      .map(letter => (guessed.includes(letter) ? letter : "_"))
+      .join(" ");
+  }
+
+  function setupLetters() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    lettersDiv.innerHTML = "";
+    alphabet.split("").forEach(letter => {
+      const btn = document.createElement("button");
+      btn.textContent = letter;
+      btn.onclick = () => askQuizBeforeGuess(letter, btn);
+      lettersDiv.appendChild(btn);
+    });
+  }
+
+  let pendingLetter = null;
+  let pendingButton = null;
+
+  function askQuizBeforeGuess(letter, button) {
+    const randomQuiz = miniQuiz[Math.floor(Math.random() * miniQuiz.length)];
+    quizModal.style.display = "flex";
+    quizQuestion.textContent = randomQuiz.q;
+    quizAnswer.value = "";
+    quizFeedback.textContent = "";
+    pendingLetter = letter;
+    pendingButton = button;
+    pendingButton.dataset.correctAnswer = randomQuiz.a.toLowerCase();
+  }
+
+  function submitQuizAnswer() {
+    const userAnswer = quizAnswer.value.trim().toLowerCase();
+    const correctAnswer = pendingButton.dataset.correctAnswer;
+
+    if (userAnswer === correctAnswer) {
+      quizModal.style.display = "none";
+      pendingButton.disabled = true;
+      guessLetter(pendingLetter, pendingButton);
+    } else {
+      quizFeedback.textContent = "❌ Incorrect. Try again.";
+      quizAnswer.value = "";
+    }
+  }
+
+  function guessLetter(letter, button) {
+    if (chosenWord.includes(letter)) {
+      guessed.push(letter);
+      displayWord();
+      checkWin();
+    } else {
+      wrongGuesses++;
       wrongCount.textContent = wrongGuesses;
       hangmanDrawing.textContent = faces[wrongGuesses];
-      message.textContent = "";
-      nextBtnHangman.style.display = "none";
-      document.getElementById("fullWordGuess").value = "";
+      checkLose();
+    }
+  }
+
+  function guessFullWord() {
+    const guess = document.getElementById("fullWordGuess").value.toUpperCase();
+    if (guess === chosenWord) {
+      guessed = chosenWord.split("");
       displayWord();
-      setupLetters();
-    }
-
-    function displayWord() {
-      wordDisplay.innerHTML = chosenWord
-        .split("")
-        .map(letter => (guessed.includes(letter) ? letter : "_"))
-        .join(" ");
-    }
-
-    function setupLetters() {
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      message.textContent = "🎉 You guessed the full word correctly!";
       lettersDiv.innerHTML = "";
-      alphabet.split("").forEach(letter => {
-        const btn = document.createElement("button");
-        btn.textContent = letter;
-        btn.onclick = () => askQuizBeforeGuess(letter, btn);
-        lettersDiv.appendChild(btn);
-      });
+      nextBtnHangman.style.display = "inline-block";
+    } else {
+      wrongGuesses++;
+      wrongCount.textContent = wrongGuesses;
+      hangmanDrawing.textContent = faces[wrongGuesses];
+      message.textContent = "❌ Incorrect full word guess!";
+      checkLose();
     }
+  }
 
-    let pendingLetter = null;
-    let pendingButton = null;
-
-    function askQuizBeforeGuess(letter, button) {
-      const randomQuiz = miniQuiz[Math.floor(Math.random() * miniQuiz.length)];
-      quizModal.style.display = "flex";
-      quizQuestion.textContent = randomQuiz.q;
-      quizAnswer.value = "";
-      quizFeedback.textContent = "";
-      pendingLetter = letter;
-      pendingButton = button;
-      pendingButton.disabled = true;
-      pendingButton.dataset.correctAnswer = randomQuiz.a.toLowerCase();
+  function checkWin() {
+    if (chosenWord.split("").every(l => guessed.includes(l))) {
+      message.textContent = "🎉 You guessed it right!";
+      lettersDiv.innerHTML = "";
+      nextBtnHangman.style.display = "inline-block";
     }
+  }
 
-    function submitQuizAnswer() {
-      const userAnswer = quizAnswer.value.toLowerCase();
-      const correctAnswer = pendingButton.dataset.correctAnswer;
-
-      if (userAnswer === correctAnswer) {
-        quizModal.style.display = "none";
-        guessLetter(pendingLetter, pendingButton);
-      } else {
-        quizFeedback.textContent = "Wrong answer. Try another letter.";
-        quizModal.style.display = "none";
-      }
+  function checkLose() {
+    if (wrongGuesses >= maxWrong) {
+      message.textContent = `❌ Game Over! The word was: ${chosenWord}`;
+      lettersDiv.innerHTML = "";
+      nextBtnHangman.style.display = "inline-block";
     }
+  }
 
-    function guessLetter(letter, button) {
-      if (chosenWord.includes(letter)) {
-        guessed.push(letter);
-        displayWord();
-        checkWin();
-      } else {
-        wrongGuesses++;
-        wrongCount.textContent = wrongGuesses;
-        hangmanDrawing.textContent = faces[wrongGuesses];
-        checkLose();
-      }
-    }
-
-    function guessFullWord() {
-      const guess = document.getElementById("fullWordGuess").value.toUpperCase();
-      if (guess === chosenWord) {
-        guessed = chosenWord.split("");
-        displayWord();
-        message.textContent = "🎉 You guessed the full word correctly!";
-        lettersDiv.innerHTML = "";
-        nextBtnHangman.style.display = "inline-block";
-      } else {
-        wrongGuesses++;
-        wrongCount.textContent = wrongGuesses;
-        hangmanDrawing.textContent = faces[wrongGuesses];
-        message.textContent = "❌ Incorrect full word guess!";
-        checkLose();
-      }
-    }
-
-    function checkWin() {
-      if (chosenWord.split("").every(l => guessed.includes(l))) {
-        message.textContent = "🎉 You guessed it right!";
-        lettersDiv.innerHTML = "";
-        nextBtnHangman.style.display = "inline-block";
-      }
-    }
-
-    function checkLose() {
-      if (wrongGuesses >= maxWrong) {
-        message.textContent = `❌ Game Over! The word was: ${chosenWord}`;
-        lettersDiv.innerHTML = "";
-        nextBtnHangman.style.display = "inline-block";
-      }
-    }
-
-    function nextQuestion() {
-      currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
-      questionDiv.style.display = "block";
-      hangmanGameDiv.style.display = "none";
-      document.getElementById("answer").value = "";
-      document.getElementById("question").textContent = questions[currentQuestionIndex].question;
-    }
-  </script>
+  function nextQuestion() {
+    currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+    questionDiv.style.display = "block";
+    hangmanGameDiv.style.display = "none";
+    document.getElementById("answer").value = "";
+    document.getElementById("question").textContent = questions[currentQuestionIndex].question;
+  }
+</script>
 </body>
 </html>
