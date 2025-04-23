@@ -168,30 +168,28 @@
   ];
 
   const miniQuiz = [
-  { q: "Does tuberculosis affect the lungs?", a: "yes" },
-  { q: "Is tuberculosis spread through air?", a: "yes" },
-  { q: "Can TB be treated with medication?", a: "yes" },
-  { q: "Is TB contagious?", a: "yes" },
-  { q: "Is cough a common symptom of TB?", a: "yes" },
-  { q: "Does TB affect the respiratory system?", a: "yes" },
-  { q: "Can TB cause chest pain?", a: "yes" },
-  { q: "Is there a symptomless type of TB?", a: "yes" },
-  { q: "Can an X-ray help detect TB in the lungs?", a: "yes" },
-  { q: "Should you cover your mouth when coughing?", a: "yes" },
-  { q: "Can TB be cured with antibiotics?", a: "yes" },
+  // One-word answer questions
+  { q: "What organ does TB mainly affect?", a: "lungs" },
+  { q: "What is a common symptom of TB?", a: "cough" },
+  { q: "What bacteria causes TB?", a: "mycobacterium" },
+  { q: "Which system does TB affect?", a: "respiratory" },
+  { q: "What scan helps detect TB?", a: "x-ray" },
+  { q: "What is the short form of tuberculosis?", a: "tb" },
+  { q: "What medicine is used to treat TB?", a: "antibiotics" },
+  { q: "Where in the body is scrofula found?", a: "neck" },
+  { q: "What disease can TB cause in the spine?", a: "pott's" },
+  { q: "What disease can TB cause in the brain?", a: "meningitis" },
+  { q: "What part of the body does hepatitis affect?", a: "liver" },
+  { q: "What hormone is low in Addison’s disease?", a: "cortisol" },
 
-  // "No" answers
-  { q: "Is tuberculosis caused by a virus?", a: "no" },
-  { q: "Can TB be spread by shaking hands?", a: "no" },
-  { q: "Does TB only affect animals?", a: "no" },
-  { q: "Can you get TB from drinking water?", a: "no" },
-  { q: "Is TB a genetic disease?", a: "no" },
-  { q: "Is TB always deadly if untreated?", a: "no" },
-  { q: "Is TB spread through food?", a: "no" },
-  { q: "Does TB only happen in cold climates?", a: "no" },
-  { q: "Can TB be prevented with a flu shot?", a: "no" },
-  { q: "Is TB the same as asthma?", a: "no" }
+  // Yes/No questions
+  { q: "Is tuberculosis contagious?", a: "yes" },
+  { q: "Can TB spread through coughing?", a: "yes" },
+  { q: "Is TB caused by a virus?", a: "no" },
+  { q: "Can you get TB from food?", a: "no" },
+  { q: "Is asthma the same as TB?", a: "no" }
 ];
+
 
   let currentQuestionIndex = 0;
   let chosenWord;
